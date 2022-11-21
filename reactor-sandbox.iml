@@ -16,6 +16,8 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.24" level="project" />
     <orderEntry type="library" name="Maven: io.projectreactor:reactor-core:3.4.24" level="project" />
     <orderEntry type="library" name="Maven: org.reactivestreams:reactive-streams:1.0.4" level="project" />
+    <orderEntry type="library" name="Maven: io.projectreactor:reactor-tools:3.5.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.projectreactor.tools:blockhound:1.0.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.19.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.19.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.9.0" level="project" />
