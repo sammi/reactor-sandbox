@@ -39,19 +39,19 @@ class HotStreamTest2 {
     void hot() throws Exception {
         int factor = 10;
         log.info("start");
-        var cdl = new CountDownLatch(2);
+        var countDownLatch = new CountDownLatch(2);
 
         Flux<Integer> live = Flux.range(0, 10).delayElements(Duration.ofMillis(factor)).share();
 
         var one = new ArrayList<Integer>();
-        live.doFinally(signalTypeConsumer(cdl)).subscribe(collect(one));
+        live.doFinally(signalTypeConsumer(countDownLatch)).subscribe(collect(one));
 
         Thread.sleep(factor * 2);
 
         var two = new ArrayList<Integer>();
-        live.doFinally(signalTypeConsumer(cdl)).subscribe(collect(two));
+        live.doFinally(signalTypeConsumer(countDownLatch)).subscribe(collect(two));
 
-        cdl.await(5, TimeUnit.SECONDS);
+        countDownLatch.await(5, TimeUnit.SECONDS);
 
         assertTrue(one.size() > two.size());
         log.info("stop");

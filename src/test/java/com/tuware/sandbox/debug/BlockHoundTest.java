@@ -3,6 +3,7 @@ package com.tuware.sandbox.debug;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import reactor.blockhound.BlockHound;
 import reactor.blockhound.integration.BlockHoundIntegration;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.ServiceLoader;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Disabled
 class BlockHoundTest {
     private static class BlockingCallError extends Error {
         BlockingCallError(String msg) {
