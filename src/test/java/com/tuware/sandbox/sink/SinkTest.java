@@ -7,12 +7,6 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import reactor.test.StepVerifier;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @Log4j2
 class SinkTest {
 
@@ -33,17 +27,44 @@ class SinkTest {
 
         Flux<Object> flux = sinkMany.asFlux();
 
-        List<Object> events = new ArrayList<>();
+        sinkMany.tryEmitNext("hi");
+        sinkMany.tryEmitNext("how are you");
+        sinkMany.tryEmitNext("?");
+        sinkMany.tryEmitComplete();
 
-        flux.subscribe(events::add);
+        StepVerifier.create(flux).expectNext("hi","how are you","?").verifyComplete();
+
+        StepVerifier.create(flux).expectErrorMatches(e -> e.getMessage().equals("UnicastProcessor allows only a single Subscriber")).verify();
+    }
+    @Test
+    void sinkManyReplayAll() {
+        Sinks.Many<Object> sinkMany = Sinks.many().replay().all();
+
+        Flux<Object> flux = sinkMany.asFlux();
 
         sinkMany.tryEmitNext("hi");
         sinkMany.tryEmitNext("how are you");
         sinkMany.tryEmitNext("?");
+        sinkMany.tryEmitComplete();
 
-        assertEquals(events, Arrays.asList("hi", "how are you", "?"));
+        StepVerifier.create(flux).expectNext("hi","how are you","?").verifyComplete();
 
-        StepVerifier.create(flux).expectErrorMatches(e -> e instanceof IllegalStateException).verify();
+        StepVerifier.create(flux).expectNext("hi","how are you","?").verifyComplete();
     }
 
+    @Test
+    void sinkManyMulticast() {
+        Sinks.Many<Object> sinkMany = Sinks.many().multicast().onBackpressureBuffer();
+
+        Flux<Object> flux = sinkMany.asFlux();
+
+        sinkMany.tryEmitNext("hi");
+        sinkMany.tryEmitNext("how are you");
+        sinkMany.tryEmitNext("?");
+        sinkMany.tryEmitComplete();
+
+        StepVerifier.create(flux).expectNext("hi","how are you","?").verifyComplete();
+
+        StepVerifier.create(flux).verifyComplete();
+    }
 }
